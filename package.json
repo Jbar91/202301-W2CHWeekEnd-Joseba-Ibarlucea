@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Challenge en parejas. Crea un modulo con funciones que repliquen, sin utilizar ninguno de los métodos ya existentes en el prototipo, los siguientes métodos de array:",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest --watchAll --coverage",
     "test:prod": "jest --watchAll --coverage --watchAll=false",

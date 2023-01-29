@@ -9,6 +9,7 @@ export const createGrid = (cols, rows) => {
     grid[i] = new Array(rows);
   }
 
+  // Populates the grid with 0's and 1's
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
       grid[i][j] = Math.round(Math.random());
@@ -18,7 +19,7 @@ export const createGrid = (cols, rows) => {
   return grid;
 };
 
-// Instantiation of the populate func to be used in the loop
+// Checks for the value of the surrounding cells
 export const neighborsState = (grid, y, x) => {
   let sum = 0;
   for (let i = -1; i < 2; i++) {
@@ -34,6 +35,7 @@ export const neighborsState = (grid, y, x) => {
   return sum;
 };
 
+// Checks if cell will live or die according to it's neighbors
 export const checkState = (grid, cols, rows) => {
   let nextGen = createGrid(cols, rows);
   grid = JSON.stringify(grid);

@@ -36,10 +36,8 @@ export const neighborsState = (grid, y, x) => {
 
 export const checkState = (grid, cols, rows) => {
   let nextGen = createGrid(cols, rows);
-  [grid, nextGen] = [
-    (grid = JSON.stringify(grid)),
-    (nextGen = JSON.parse(grid)),
-  ];
+  grid = JSON.stringify(grid);
+  nextGen = JSON.parse(grid);
   grid = JSON.parse(grid);
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {

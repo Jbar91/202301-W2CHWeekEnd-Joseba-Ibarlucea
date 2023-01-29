@@ -37,10 +37,10 @@ export const neighborsState = (grid, y, x) => {
 
 // Checks if cell will live or die according to it's neighbors
 export const checkState = (grid, cols, rows) => {
-  let nextGen = createGrid(cols, rows);
   grid = JSON.stringify(grid);
-  nextGen = JSON.parse(grid);
+  const nextGen = JSON.parse(grid);
   grid = JSON.parse(grid);
+
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       const state = grid[i][j];
@@ -62,7 +62,6 @@ export const checkState = (grid, cols, rows) => {
     }
   }
 
-  // Equals grid to changed after checking neighbors
   grid = nextGen;
   return grid;
 };

@@ -1,30 +1,16 @@
-export const add = (a, b) => a + b;
+// Creates a random number with a min of 3 and a max of 9
+export const randNum = () => Math.floor(Math.random() * (20 - 3) + 3);
 
-// Creates a random number with a min of 4 and a max of 9
-const randNum = () => Math.floor(Math.random() * (10 - 4) + 4);
-
-// Assign random value to columns and rows
-const rows = randNum();
-const cols = rows;
-let interval = 0;
-const createGrid = (cols, rows) => {
+export const createGrid = (cols, rows) => {
   // Create array with new array for the columns
-  const arr = new Array(cols);
-  for (let i = 0; i < arr.length; i++) {
+  const grid = new Array(cols);
+  for (let i = 0; i < grid.length; i++) {
     // Create second inner array for the rows
-    arr[i] = new Array(rows);
+    grid[i] = new Array(rows);
   }
 
-  return arr;
-};
-
-const grid = createGrid(cols, rows);
-// Populate the grid by using the rows and cols and then assign a value to the cell
-// with a random number between 0 and 1
-
-const populate = () => {
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
       grid[i][j] = Math.round(Math.random());
     }
   }
@@ -32,50 +18,51 @@ const populate = () => {
   return grid;
 };
 
-const start = setInterval(() => {
-  const nextGen = grid;
-  console.log("^^^^^^^^^^^^");
-  populate().forEach((item) => console.log(item.join(" ")));
-  console.log("--------");
-
-  const neighborsState = (grid, x, y) => {
-    let sum = 0;
-    for (let i = -1; i < 2; i++) {
-      for (let j = -1; j < 2; j++) {
-        const row = (y + j + rows) % rows;
-        const col = (x + i + cols) % cols;
-        sum += grid[row][col];
-      }
+// Instantiation of the populate func to be used in the loop
+export const neighborsState = (grid, y, x) => {
+  let sum = 0;
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      const col = (y + i + grid.length) % grid.length;
+      const row = (x + j + grid.length) % grid.length;
+      sum += grid[col][row];
     }
+  }
 
-    sum -= grid[x][y];
+  sum -= grid[y][x];
 
-    return sum;
-  };
+  return sum;
+};
 
+export const checkState = (grid, cols, rows) => {
+  let nextGen = createGrid(cols, rows);
+  [grid, nextGen] = [
+    (grid = JSON.stringify(grid)),
+    (nextGen = JSON.parse(grid)),
+  ];
+  grid = JSON.parse(grid);
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       const state = grid[i][j];
       const neighbors = neighborsState(grid, i, j);
-
+      // If cell is dead and count of neighbors is equal to 3, lives again
       if (state === 0 && neighbors === 3) {
         nextGen[i][j] = 1;
       }
 
-      if ((state === 1 && neighbors < 2) || neighbors > 3) {
+      // If cell is alive and count of neighbors is less than 2 or greater than 3, dies
+      if (state === 1 && (neighbors < 2 || neighbors > 3)) {
         nextGen[i][j] = 0;
       }
 
+      // If cell is alive and count of neighbors is exactly 2 or 3, stays alive
       if (state === 1 && (neighbors === 2 || neighbors === 3)) {
         nextGen[i][j] = 1;
       }
     }
   }
 
-  nextGen.forEach((item) => console.log(item.join(" ")));
-  interval++;
-  if (interval === 5) {
-    console.log(interval);
-    clearInterval(start);
-  }
-}, 1500);
+  // Equals grid to changed after checking neighbors
+  grid = nextGen;
+  return grid;
+};
